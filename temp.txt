@@ -1,0 +1,71 @@
+[
+    ("load <filename>", "Load a CSV file."),
+    ("save [filename]", "Save the current CSV data to a file. If no filename is provided, it saves to the current file."),
+    ("add row <values>", "Add a new row with the specified values."),
+    ("drop row <index>", "Drop a row at the specified index."),
+    ("edit row <index> <column_name> <new_value>",
+     "Edit a specific row and column with a new value."),
+    ("add column <column_name> [values]",
+     "Add a new column with the specified name and optional values."),
+    ("drop column <column_name>", "Drop a column with the specified name."),
+    ("edit column <column_name> <row_index> <new_value>",
+     "Edit a specific cell in a column."),
+    ("get row <index>", "Get the data for a specific row."),
+    ("set row <index> <new_row>", "Set a new row at the specified index."),
+    ("get column <column_name>", "Get the data for a specific column."),
+    ("set column <column_name> <new_column>",
+     "Set a new column with the specified name."),
+    ("switch", "Switch to typing.")
+    ("exit", "Exit the CSV editor.")
+]
+
+
+elif user_sub_cmd == "save csv":
+    # Code to save the current CSV data to a file
+
+    csv_filename_path_toSave = micInput(
+        f"Enter the filename/path where you want to save your data else this will be save in the same csv_file, {csv_.csv_file_path}")
+
+    if csv_filename_path_toSave == '':
+        csv_.save_csv()
+    else:
+        csv_.save_csv(csv_filename_path_toSave)
+
+    operations_on_csv(csv_)
+
+
+if isinstance(no_of_rows_to_add, int):
+    if no_of_rows_to_add == 1:
+        values_to_add = micInput(
+            'Say the value/s you want to set in the row you are adding - or - say continue if you want to keep the row empty')
+        if values_to_add != 'continue' or values_to_add != '':
+            row_added = self.csv_.add_row(values_to_add)
+        else:
+            row_added = self.csv_.add_row()
+
+        print(f'\n{self.csv_.get_row(row_added)}\n')
+        self.save_changes(self.csv_)
+    else:
+        for no_of_row in range(no_of_rows_to_add):
+            row_added = self.csv_.add_row()
+
+            speak(f'Row.{no_of_row+1} added successfully!')
+            print(f'\n{self.csv_.get_row(row_added)}\n')
+
+            values_to_add = micInput(
+                f'Say the value/s you want to set in the row.{no_of_row+1} you added - or - say continue if you want to keep the row empty')
+
+            if values_to_add != 'continue' or values_to_add != '':
+                values_to_add = values_to_add.split(' ')
+                self.csv_.set_row(row_added, values_to_add)
+
+                speak(
+                    "The values you provided have been successfully added to the row...")
+                print(f'\n{self.csv_.get_row(row_added)}\n')
+
+        self.save_changes(self.csv_)
+
+
+if spoken_text == 'switch':
+    speak('Enter:')
+    return input()
